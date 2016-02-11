@@ -1,0 +1,141 @@
+@import "./normalize.css", "https://fonts.googleapis.com/css?family=Poiret+One";
+
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+html {
+	overflow: hidden;
+}
+
+body {
+	background: rgb(184, 31, 54);
+}
+
+.flex {
+	width: 100%;
+	height: 90%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+$plate-color: #EEE;
+$shadow-color: rgba(0, 0, 0, 0.2);
+$pancake-color: rgb(215, 203, 159);
+$pancake-height: 13.5px;
+$pancake-width: 175px;
+$curve: cubic-bezier(0.21, 0.38, 0.09, 1.12);
+$animation-duration: 6s;
+
+.plate-holder {
+	animation: plate-in $animation-duration infinite;
+	animation-timing-function: $curve;
+}
+
+.plate {
+	z-index: 2;
+	display: block;
+	width: 200px;
+	height: 14px;
+	border-radius: 5px 5px 12px 12px;
+	background: $plate-color;
+	position: relative;
+	box-shadow: inset -3px -3px 3px 3px lighten($plate-color, 1%);
+
+	&::after {
+		display: block;
+		content: '';
+		width: 125px;
+		height: 8px;
+		border-radius: 0px 0px 10px 10px;
+		margin: 0px auto;
+		position: relative;
+		top: 100%;
+		background: darken($plate-color, 5%);
+	}
+}
+
+.shadow {
+	z-index: 1;
+	background: $shadow-color;
+	width: 150px;
+	height: 10px;
+	border-radius: 80%;
+	display: block;
+	margin: 0px auto;
+	transform: translateY(45%);
+}
+
+.pancake {
+	display: block;
+	width: $pancake-width;
+	height: $pancake-height;
+	background: $pancake-color;
+	border-radius: 8px;
+	margin: 0px auto;
+	box-shadow: inset 0px -3px 0px 2px darken($pancake-color, 10%);
+	animation: drop-in $animation-duration infinite;
+	animation-timing-function: $curve;
+	transform: translateY(-100vh);
+}
+
+.wrapper {
+	animation: slide-out $animation-duration infinite;
+	animation-timing-function: $curve;
+}
+
+$pancakes: 6;
+$drop-time: 0.35s;
+$drop-wait: 0.2s;
+
+@for $i from 0 to $pancakes {
+	.pancake:nth-child(#{$pancakes - $i}) {
+		animation-delay: ($drop-wait * $i) + $drop-time;
+	}
+}
+
+@keyframes plate-in {
+	0% {
+		transform: translateX(100vw);
+	}
+	15%, 100% {
+		transform: translateX(0);
+	}
+}
+
+@keyframes drop-in {
+	0%, 5%, 100% {
+		opacity: 0;
+		transform: translateY(-100vh);
+	}
+	15% {
+		opacity: 0.8;
+	}
+	20% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	70% {
+		opacity: 1;
+		transition: none;
+		transform: translateY(0);
+	}
+}
+
+@keyframes slide-out {
+	0%, 55% {
+		transform: translateX(0);
+	}
+	85%, 100% {
+		transform: translateX(-100vw);
+	}
+}
+
+.text {
+	display: inline-block;
+	font-family: 'Poiret One', cursive;
+	padding-left: 20px;
+	color: #DDD;
+}
